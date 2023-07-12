@@ -5,6 +5,10 @@ from django.forms import ModelChoiceField
 
 import ipaddress
 
+from django.forms.utils import ErrorList
+
+from django.core.exceptions import ValidationError
+
 
 class GatewayForm(forms.ModelForm):
     class Meta:
@@ -31,3 +35,28 @@ class PeripheralDeviceForm(forms.ModelForm):
     class Meta:
         model = PeripheralDevice
         fields = ["uid", "vendor", "status", "gateway"]
+
+    def clean(self):
+        cleaned_data = super().clean()
+        gateway = cleaned_data.get("gateway")
+        if gateway and gateway.peripheral_devices.count() == 10:
+            raise ValidationError(
+                "A gateway can have a maximum of 10 peripheral devices."
+            )
+        return cleaned_data
+
+    # minimum value of the input type number for uid is 0
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["uid"].widget.attrs.update({"min": "0"})
+
+
+# overwriting errorList style
+class AlertErrorList(ErrorList):
+    def __str__(self):
+        return self.as_divs()
+
+    def as_divs(self):
+        if not self:
+            return ""
+        return f'<div class="text-danger" role="alert">{super().as_ul()}</div>'
