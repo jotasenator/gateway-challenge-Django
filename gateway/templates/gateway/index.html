@@ -1,0 +1,26 @@
+{% extends "gateway/layout.html" %}
+{% block body %}
+<div class="container mt-5 border p-3 br-3"> 
+    <h1>Create Gateway</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+        {{ gateway_form.as_p }}
+        </div>
+        <input class="btn btn-primary" type="submit" name="gateway_submit" value="Save Gateway">
+    </form>    
+</div>
+<div class="container mt-5 border p-3 br-3"> 
+    <h1>Create Peripheral Device</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+        {{ peripheral_device_form.as_p }}
+        </div>
+        <input class="btn btn-primary" type="submit" name="peripheral_device_submit" value="Save Peripheral Device">
+    </form>  
+</div>
+    
+
+
+{% endblock %}

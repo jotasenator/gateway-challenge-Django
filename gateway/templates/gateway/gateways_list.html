@@ -1,0 +1,31 @@
+{% extends "gateway/layout.html" %} 
+{% block body %}
+<div class="container mt-5">
+  <h1 class="mb-4">Gateways</h1>
+  {% for gateway in gateway_data %}
+  <div class="card mb-4">
+    <div class="card-header">
+      <b>{{ gateway.name }}</b> - {{gateway.serial_number}} - ({{ gateway.ipv4_address }})
+    </div>
+    <ul class="list-group list-group-flush">
+      {% for peripheral in gateway.peripherals %}
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
+        {{ peripheral.uid }} - {{ peripheral.vendor }} ({{ peripheral.status }}) - {{peripheral.date_created}}
+        <form
+          method="POST"
+          action="{% url 'peripheral_device_delete' peripheral.id %}"
+        >
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger btn-sm">
+            Delete
+          </button>
+        </form>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+:root {
+    --border-color: #80bdff;
+    --grey-color: #495057;
+    --box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+  
+  body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+  
+  .content {
+    flex: 1;
+  }
+  
+  .br-3 {
+    border-radius: 1rem;
+  }
+  
+  .fs-24 {
+    font-size: 24px;
+  }  
+  
+  /* mimicking the bootstrap style for those elements */
+  .form-group p label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-group p input {
+    display: block;
+    width: 100%;
+    height: calc(1.5rem + 0.75rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--grey-color);
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: var(--border-color) 0.15s ease-in-out,
+      var(--box-shadow) 0.15s ease-in-out;
+  }
+  
+  .form-group p input:focus {
+    color: var(--grey-color);
+    background-color: #fff;
+    border-color: var(--border-color);
+    outline: 0;
+    box-shadow: var(--box-shadow);
+  }
+  
+  .index {
+    font-size: 1rem;
+  }
+  
+  .list-group-item:hover {
+    background-color: #d6dde4;
+  }
+  
+  .text-align-justify {
+    text-align: justify;
+  }
