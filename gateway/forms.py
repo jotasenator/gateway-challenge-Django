@@ -51,7 +51,8 @@ class PeripheralDeviceForm(forms.ModelForm):
         self.fields["uid"].widget.attrs.update({"min": "0"})
 
 
-# overwriting errorList style
+# overwriting errorList style, to make it look like a bootstrap alert
+# just creating errorlist class to override the default one in styles.css is a simpler approach
 class AlertErrorList(ErrorList):
     def __str__(self):
         return self.as_divs()
