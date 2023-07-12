@@ -13,4 +13,5 @@ urlpatterns = [
         views.peripheral_device_delete,
         name="peripheral_device_delete",
     ),
+    path('update_device_status/', views.update_device_status, name='update_device_status'),
 ]

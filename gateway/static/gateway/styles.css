@@ -68,3 +68,7 @@ body {
 .errorlist {
   color: red;
 }
+
+i:hover{
+  cursor:pointer;
+}

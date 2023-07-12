@@ -19,8 +19,15 @@
       <li
         class="list-group-item d-flex justify-content-between align-items-center"
       >
-        {{ peripheral.uid }} - {{ peripheral.vendor }} ({{ peripheral.status }})
-        - {{peripheral.date_created}}
+      <div>
+        {{ peripheral.uid }} - {{ peripheral.vendor }}     
+        {% if  peripheral.status == 'online' %}
+        <i class="bi bi-lightbulb toggle-status" data-id="{{ peripheral.id }}"></i>
+        {% else %}
+        <i class="bi bi-lightbulb-off toggle-status" data-id="{{ peripheral.id }}"></i>
+        {% endif %}
+        <small class="text-muted">{{peripheral.date_created}}</small>
+      </div>
         <form
           class="delete-device"
           method="POST"
@@ -45,5 +52,50 @@
       }
     })
   );
+
+  // Add an event listener to all elements with the "toggle-status" class
+  document.querySelectorAll('.toggle-status').forEach(function(icon) {
+    icon.addEventListener('click', function(event) {
+      // Get the ID of the clicked peripheral from the data attribute
+      let id = event.target.dataset.id;
+      console.log(id)
+
+      // Determine the new status based on the current icon class
+      let newStatus = event.target.classList.contains('bi-lightbulb') ? 'offline' : 'online';
+      console.log(newStatus)
+
+      let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      console.log(csrftoken)
+
+      // Create a new FormData object
+      let change_data_peripheral_device = new FormData();
+      change_data_peripheral_device.append('id', id);
+      change_data_peripheral_device.append('peripheral_status', newStatus);
+
+      // Send a fetch request to the server to update the status of the peripheral
+      fetch('update_device_status/', {
+        method: 'POST',
+        headers: {
+          //'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken
+        },
+        //body: JSON.stringify({id: id, peripheral_status: newStatus})
+        //body: change_data_peripheral_device,
+        body:change_data_peripheral_device
+      })
+      .then(function(response) {
+        if (response.ok) {
+          // If the request was successful, update the icon class to reflect the new status
+          if (newStatus === 'online') {
+            event.target.classList.remove('bi-lightbulb-off');
+            event.target.classList.add('bi-lightbulb');
+          } else {
+            event.target.classList.remove('bi-lightbulb');
+            event.target.classList.add('bi-lightbulb-off');
+          }
+        }
+      });
+    });
+  });
 </script>
 {% endblock %}

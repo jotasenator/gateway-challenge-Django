@@ -7,6 +7,9 @@ from django.contrib import messages
 
 from natsort import natsorted
 
+import json
+from django.http import JsonResponse
+
 # Create your views here.
 
 
@@ -86,4 +89,35 @@ def peripheral_device_delete(request, peripheral_id):
     if request.method == "POST":
         peripheral = get_object_or_404(PeripheralDevice, pk=peripheral_id)
         peripheral.delete()
+    return redirect("gateways_list")
+
+#if i send data from javascript as json-->
+
+# def update_device_status(request):
+#     if request.method == 'POST':
+#         data = json.loads(request.body)
+#         print(data)
+#         id = data.get('id')
+#         print(id)
+#         new_status = data.get('peripheral_status')
+#         try:
+#             device = PeripheralDevice.objects.get(id=id)
+#             device.status = new_status
+#             device.save()
+#             return JsonResponse({'status': 'success'})
+#         except PeripheralDevice.DoesNotExist:
+#             return JsonResponse({'status': 'error', 'message': 'Device not found'})
+#     else:
+#         return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+
+
+def update_device_status(request):
+    if request.method == "POST":
+        peripheral_id = request.POST.get("id")        
+        print(f"peripheral_id {peripheral_id}")
+        peripheral_status = request.POST.get("peripheral_status")
+        print(f"peripheral_status {peripheral_status}")
+        peripheral = get_object_or_404(PeripheralDevice, pk=peripheral_id)
+        peripheral.status = peripheral_status
+        peripheral.save()
     return redirect("gateways_list")
