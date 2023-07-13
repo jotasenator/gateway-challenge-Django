@@ -9,6 +9,8 @@ from django.forms.utils import ErrorList
 
 from django.core.exceptions import ValidationError
 
+from natsort import natsorted
+
 
 class GatewayForm(forms.ModelForm):
     class Meta:
@@ -24,13 +26,17 @@ class GatewayForm(forms.ModelForm):
         return ipv4_address
 
 
-class GatewayModelChoiceField(ModelChoiceField):
+class NatsortedGatewayModelChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
         return f"{obj.name} - {obj.serial_number} - {obj.ipv4_address}"
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.choices = natsorted(self.choices, key=lambda x: x[1])
+
 
 class PeripheralDeviceForm(forms.ModelForm):
-    gateway = GatewayModelChoiceField(queryset=Gateway.objects.all())
+    gateway = NatsortedGatewayModelChoiceField(queryset=Gateway.objects.all())
 
     class Meta:
         model = PeripheralDevice
