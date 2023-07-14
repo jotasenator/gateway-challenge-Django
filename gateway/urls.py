@@ -13,5 +13,12 @@ urlpatterns = [
         views.peripheral_device_delete,
         name="peripheral_device_delete",
     ),
-    path('update_device_status/', views.update_device_status, name='update_device_status'),
+    path(
+        "update_device_status/", views.update_device_status, name="update_device_status"
+    ),
+    path(
+        "check_uid_exists/<int:uid>",
+        views.check_uid_exists,
+        name="check_uid_exists",
+    ),
 ]

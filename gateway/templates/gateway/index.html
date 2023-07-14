@@ -1,26 +1,54 @@
-{% extends "gateway/layout.html" %}
+{% extends "gateway/layout.html" %} 
 {% block body %}
-<div class="container mt-5 border p-3 br-3"> 
-    <h1 >Create Gateway</h1>    
-    <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-        {{ gateway_form.as_p }}
-        </div>
-        <input class="btn btn-primary" type="submit" name="gateway_submit" value="Save Gateway">
-    </form>    
+<div class="container mt-5 border p-3 br-3">
+  <h1>Create Gateway</h1>
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">{{ gateway_form.as_p }}</div>
+    <input
+      class="btn btn-primary"
+      type="submit"
+      name="gateway_submit"
+      value="Save Gateway"
+    />
+  </form>
 </div>
-<div class="container mt-5 border p-3 br-3"> 
-    <h1>Create Peripheral Device</h1>
-    <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-        {{ peripheral_device_form.as_p }}
-        </div>
-        <input class="btn btn-primary" type="submit" name="peripheral_device_submit" value="Save Peripheral Device">
-    </form>  
+<div class="container mt-5 border p-3 br-3">
+  <h1>Create Peripheral Device</h1>
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">{{ peripheral_device_form.as_p }}</div>
+    <input
+      class="btn btn-primary"
+      type="submit"
+      name="peripheral_device_submit"
+      value="Save Peripheral Device"
+    />
+  </form>
 </div>
-    
 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    let prevValue = parseInt(
+      document.getElementById("id_peripheral_device-uid").value
+    );
+    document
+      .getElementById("id_peripheral_device-uid")
+      .addEventListener("input", function () {
+        let uid = parseInt(this.value);        
+        prevValue = uid;
+        fetch("/check_uid_exists/" + uid)
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (data) {
+            if (data.exists) {
+              document.getElementById("id_peripheral_device-uid").value =
+                data.next_uid;
+            }
+          });
+      });
+  });
+</script>
 
 {% endblock %}

@@ -91,7 +91,8 @@ def peripheral_device_delete(request, peripheral_id):
         peripheral.delete()
     return redirect("gateways_list")
 
-#if i send data from javascript as json-->
+
+# if i send data from javascript as json-->
 
 # def update_device_status(request):
 #     if request.method == 'POST':
@@ -113,7 +114,7 @@ def peripheral_device_delete(request, peripheral_id):
 
 def update_device_status(request):
     if request.method == "POST":
-        peripheral_id = request.POST.get("id")        
+        peripheral_id = request.POST.get("id")
         print(f"peripheral_id {peripheral_id}")
         peripheral_status = request.POST.get("peripheral_status")
         print(f"peripheral_status {peripheral_status}")
@@ -121,3 +122,11 @@ def update_device_status(request):
         peripheral.status = peripheral_status
         peripheral.save()
     return redirect("gateways_list")
+
+
+def check_uid_exists(request, uid):
+    exists = PeripheralDevice.objects.filter(uid=uid).exists()
+    next_uid = uid
+    while PeripheralDevice.objects.filter(uid=next_uid).exists():
+        next_uid += 1
+    return JsonResponse({"exists": exists, "next_uid": next_uid})
